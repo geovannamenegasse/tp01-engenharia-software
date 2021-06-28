@@ -61,8 +61,8 @@ Sistema para aplicação de provas online e gerenciamento de turmas e notas
 | Formulário de cadastro de prova        (front)   |Geovanna Menegasse|     4      |   Concluído  |
 | Formulário de cadastro de prova         (back)   |Geovanna Menegasse|     4      |   Concluído  |
 | Tabelas de provas no banco de dados     (back)   |Geovanna Menegasse|     4      |   Concluído  |
-| Formulário de responder prova          (front)   |Geovanna Menegasse|     5      |   Pendente   |
-| Formulário de responder prova           (back)   |Geovanna Menegasse|     5      |   Pendente   |
+| Formulário de responder prova          (front)   |Geovanna Menegasse|     5      |   Concluído  |
+| Formulário de responder prova           (back)   |Geovanna Menegasse|     5      | Em Andamento |
 | Tabela de respostas das provas          (back)   |Geovanna Menegasse|     5      |   Concluído  |
 | Correçao automática da prova            (back)   |Amanda Guimarães  |     6      |   Pendente   |
 | Visualizar a prova corrigida           (front)   |Matheus Irias     |     6      |   Pendente   |
