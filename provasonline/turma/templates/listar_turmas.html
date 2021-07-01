@@ -5,5 +5,31 @@
 {% block content %}
 
 LISTAR turmas
+{% for t in turmas %}
+<div class="col-sm-4 p-2">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>Nome</td>
+                <td>Descricao</td>
+                <td>Ação</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ t.nome }}</td>
+                <td>{{ t.descricao }}</td>
+                <td>
+                    <a href="{{ url_for('turma.adicionar_alunos', id=t.id) }}">
+                        <button type="submit" class="btn btn-primary">
+                            <b>+</b>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endfor %}
 
 {% endblock %}
