@@ -8,14 +8,16 @@ class Prova(db.Model):
     data        = db.Column(db.Date, nullable = False)
     valor       = db.Column(db.Integer, nullable = True)
     professor   = db.Column(db.Integer, db.ForeignKey('professor.id', ondelete = 'CASCADE'), nullable = True)
+    turma       = db.Column(db.Integer, db.ForeignKey('turma.id', ondelete = 'CASCADE'), nullable = True)
 
     perguntas = db.relationship("Pergunta", backref='perguntas', lazy='dynamic')
     
-    def __init__(self, data, descricao, valor, professor):
+    def __init__(self, data, descricao, valor, professor, turma):
         self.data      = data
         self.descricao = descricao
         self.valor     = valor
         self.professor = professor
+        self.turma     = turma
 
 class Pergunta(db.Model):
 

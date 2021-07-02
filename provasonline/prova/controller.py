@@ -1,5 +1,6 @@
 from provasonline import db, login_required
 from provasonline.prova.models.Prova import Opcao, Pergunta, Prova, Resposta
+from provasonline.turma.models.Turma import Turma
 from provasonline.constants import usuario_urole_roles
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
@@ -16,8 +17,9 @@ def cadastrar_prova():
 
         descricao = request.form['prova']
         data      = datetime.strptime(request.form['data'], '%Y-%m-%d').date()
+        turma     = request.form['turma']
         #TODO: professor como current_user (preciso do login pronto)
-        prova     = Prova(data, descricao, 0, 9)
+        prova     = Prova(data, descricao, 0, 9, turma)
         db.session.add(prova)
         db.session.commit()
 
@@ -69,7 +71,8 @@ def cadastrar_prova():
         flash("Prova cadastrada com sucesso")
         return redirect(url_for('prova.listar_provas'))    
 
-    return render_template("cadastrar_prova.html")
+    turmas = Turma.query.all()
+    return render_template("cadastrar_prova.html", turmas = turmas)
 
 @prova.route("/listar_provas", methods=["GET","POST"])
 # @login_required()
