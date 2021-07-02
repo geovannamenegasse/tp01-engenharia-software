@@ -39,3 +39,9 @@ def adicionar_alunos():
             # {"id": 2, "name": "Dora The Explorer"},
         # ]
     return render_template("adicionar_alunos.html", id = id)
+
+@turma.route("/ver_turma/<_id>", methods=["GET","POST"])
+def ver_turma(_id):
+    turma = Turma.query.get_or_404(_id)
+    return render_template("ver_turma.html", turma=turma)
+

@@ -4,6 +4,16 @@
 
 {% block content %}
 
-LISTAR ALUNOS
+<div class="container">
+
+    {% for aluno in alunos %} 
+    <a href="{{url_for('aluno.ver_aluno', _id = aluno.id)}}" type="button" class="btn btn-outline-secondary col-md-12 mb-2" role="button">
+        <div class="d-flex justify-content-start">
+            {{ aluno.nome }} 
+        </div>
+    </a>
+    {% endfor %}
+
+</div>
 
 {% endblock %}
