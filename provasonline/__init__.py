@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 Migrate(app,db, compare_type = True)
 
 #################################################################
-################# VARIÁVEIS/FUNÇÕES DO TEMPLATE #################
+################# VARIAVEIS/FUNCOES DO TEMPLATE #################
 #################################################################
 
 from provasonline.constants import usuario_urole_roles
