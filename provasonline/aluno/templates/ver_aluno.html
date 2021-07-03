@@ -22,6 +22,21 @@
             {% endfor %}
         </div>
     </div>
+    <br>
+    <div class="card">
+        <div class="card-header">
+          Provas
+        </div>
+        <div class="card-body">
+            {% for prova in provas %}
+            <a href="{{url_for('prova.prova_respondida', _id = prova.id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
+                <div class="d-flex justify-content-start">
+                    {{ prova.descricao }} 
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
 
 </div>
 

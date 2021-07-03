@@ -1,6 +1,7 @@
 from flask import Blueprint
 from provasonline.aluno.models.Aluno import Aluno
 from provasonline.turma.models.Turma import Turma
+from provasonline.prova.models.Prova import Prova
 from flask import render_template, redirect, url_for, flash, request
 
 aluno = Blueprint('aluno', __name__, template_folder='templates')
@@ -14,4 +15,5 @@ def listar_alunos():
 def ver_aluno(_id):
     aluno = Aluno.query.get_or_404(_id)
     turmas = aluno.turmas
-    return render_template("ver_aluno.html", aluno = aluno, turmas = turmas)
+    provas = aluno.provas
+    return render_template("ver_aluno.html", aluno = aluno, turmas = turmas, provas = provas)

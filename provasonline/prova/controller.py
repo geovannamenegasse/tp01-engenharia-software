@@ -1,6 +1,7 @@
 from provasonline import db, login_required
-from provasonline.prova.models.Prova import Opcao, Pergunta, Prova, Resposta
+from provasonline.prova.models.Prova import Opcao, Pergunta, Prova, Resposta, AlunoProva
 from provasonline.turma.models.Turma import Turma
+from provasonline.aluno.models.Aluno import Aluno
 from provasonline.constants import usuario_urole_roles
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
@@ -86,22 +87,28 @@ def listar_provas():
 @prova.route("/responder_prova/<_id>", methods=["GET","POST"])
 # @login_required()
 def responder_prova(_id):
-    prova = Prova.query.get_or_404(_id) 
+    prova = Prova.query.get_or_404(_id)  
+    
+    aluno = Aluno.query.get_or_404(15)
 
     #TODO: se ja tiver essa prova respondida pra esse aluno, bloqueia
-    #TODO: aluno como current_user (preciso do login pronto)
     #TODO: remover a permissão do botão para o professor
 
     if request.method == 'POST':
+        
+        aluno.provas.append(prova)  # mudar para current user  
+        # nota = 0
+        
         for p in prova.perguntas: 
             opcao = request.form['op'+str(p.id)]
             
             aux = Opcao.query.get_or_404(opcao)
 
             if (aux.correta == 1):                
-                resposta = Resposta(_id, p.id, opcao, 1, 8)
+                resposta = Resposta(_id, p.id, opcao, 1, 8) # mudar para current user 
+                # nota = nota + aux.valor
             else:
-                resposta = Resposta(_id, p.id, opcao, 0, 8)
+                resposta = Resposta(_id, p.id, opcao, 0, 8) # mudar para current user 
 
             db.session.add(resposta)    
         db.session.commit()    
@@ -114,6 +121,7 @@ def responder_prova(_id):
 @prova.route("/prova_respondida/<_id>", methods=["GET","POST"])
 # @login_required()
 def prova_respondida(_id):
+    # TODO: pegar provas do aluno
     prova = Prova.query.get_or_404(_id)
     respostas = Resposta.query.filter(Resposta.prova == _id).all()
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)

@@ -1,5 +1,11 @@
 from provasonline import db
 
+
+AlunoProva = db.Table("aluno_prova",
+             db.Column('aluno_id', db.Integer, db.ForeignKey('aluno.id')),
+             db.Column('prova_id', db.Integer, db.ForeignKey('prova.id')))
+
+
 class Prova(db.Model):
 
     __tablename__ = 'prova'
@@ -9,6 +15,7 @@ class Prova(db.Model):
     valor       = db.Column(db.Integer, nullable = True)
     professor   = db.Column(db.Integer, db.ForeignKey('professor.id', ondelete = 'CASCADE'), nullable = True)
     turma       = db.Column(db.Integer, db.ForeignKey('turma.id', ondelete = 'CASCADE'), nullable = True)
+    alunos      = db.relationship("Aluno", secondary=AlunoProva, back_populates="provas")
 
     perguntas = db.relationship("Pergunta", backref='perguntas', lazy='dynamic')
     
