@@ -5,12 +5,16 @@
 {% block content %}
 
 <div class="container">
+    <!-- se o current_user for professor -->
     <div class="d-flex justify-content-end mb-2">
         <a href="{{url_for('prova.cadastrar_prova')}}" type="button" class="btn btn-primary" role="button">Nova Prova</a>
-    </div>
-    
+    </div>    
+    <!-- endif -->
 
     {% for prova in provas %} 
+    <!-- se o current_user for professor -->
+        <!-- url_for('prova.ver_prova_correta', _id = prova.id) -->
+    <!-- se o current_user for aluno -->
     <a href="{{url_for('prova.responder_prova', _id = prova.id)}}" type="button" class="btn btn-outline-secondary col-md-12 mb-2" role="button">
         <div class="d-flex justify-content-start">
             {{ prova.descricao }} 

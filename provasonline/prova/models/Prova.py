@@ -1,11 +1,6 @@
 from provasonline import db
 
 
-# AlunoProva = db.Table("aluno_prova",
-#              db.Column('aluno_id', db.Integer, db.ForeignKey('aluno.id')),
-#              db.Column('prova_id', db.Integer, db.ForeignKey('prova.id'))
-#              db.Column('nota', db.Integer))
-
 class AlunoProva(db.Model):
     __tablename__ = 'aluno_prova'
     aluno_id = db.Column(db.Integer, db.ForeignKey('aluno.id', ondelete = 'CASCADE'), nullable = False, primary_key = True)
@@ -27,7 +22,6 @@ class Prova(db.Model):
     professor   = db.Column(db.Integer, db.ForeignKey('professor.id', ondelete = 'CASCADE'), nullable = True)
     turma       = db.Column(db.Integer, db.ForeignKey('turma.id', ondelete = 'CASCADE'), nullable = True)
     
-    # alunos      = db.relationship("Aluno", secondary=AlunoProva, back_populates="provas")
     perguntas   = db.relationship("Pergunta", backref='perguntas', lazy='dynamic')
     
     def __init__(self, data, descricao, valor, professor, turma):

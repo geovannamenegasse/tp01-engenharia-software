@@ -78,25 +78,23 @@ def cadastrar_prova():
 @prova.route("/ver_prova_correta/<_id>", methods=["GET","POST"])
 # @login_required(role=[usuario_urole_roles['PROFESSOR']])
 def ver_prova_correta(_id):
-    pass
+    prova = Prova.query.get_or_404(_id)
+    return render_template("ver_prova_correta.html", prova = prova)
 
 @prova.route("/listar_provas", methods=["GET","POST"])
 # @login_required()
 def listar_provas():
     #TODO: listar provas das turmas do current_user
-    #TODO: separar tipo de listagem de aluno e professor
 
     provas = Prova.query.all()
     return render_template("listar_provas.html", provas = provas)
 
 @prova.route("/responder_prova/<_id>", methods=["GET","POST"])
-# @login_required(aluno)
+# @login_required(role=[usuario_urole_roles['ALUNO']])
 def responder_prova(_id):
     prova = Prova.query.get_or_404(_id)      
 
-    #TODO: if current_user.urole == 'professor': vai para ver a prova cadastrada
-
-    if AlunoProva.query.filter(AlunoProva.prova_id == _id, AlunoProva.aluno_id == 15):
+    if AlunoProva.query.filter(AlunoProva.prova_id == _id, AlunoProva.aluno_id == 15).first():
         flash("Você já respondeu essa prova!")
         return redirect(url_for('prova.prova_respondida', _id = _id)) 
 
@@ -128,7 +126,7 @@ def responder_prova(_id):
 @prova.route("/prova_respondida/<_id>", methods=["GET","POST"])
 # @login_required()
 def prova_respondida(_id):
-    # TODO: pegar provas do aluno
+    # TODO: PEGAR RESPOSTA DA PROVA DO ALUNO E MOSTRAR NOTA E CORREÇÃO
     prova = Prova.query.get_or_404(_id)
-    respostas = Resposta.query.filter(Resposta.prova == _id).all()
+    respostas = Resposta.query.filter(Resposta.prova == _id).all() # filtrar pelo aluno tb
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)

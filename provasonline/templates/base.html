@@ -18,15 +18,20 @@
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
+              <!-- se o current_user.isauthenticated -->
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                   <a class="nav-link {{ 'active' if active_page == 'home' else '' }}" href="{{url_for('usuario.index')}}">Home</a>
+                  <!-- se for professor -->
                   <a class="nav-link {{ 'active' if active_page == 'alunos' else '' }}" href="{{url_for('aluno.listar_alunos')}}">Alunos</a>
+                  <!-- se for aluno -->
+                  <!-- url_for('aluno.ver_aluno', _id == current_user.id ) PERFIL -->
                   <a class="nav-link {{ 'active' if active_page == 'turmas' else '' }}" href="{{url_for('turma.listar_turmas')}}">Turmas</a>
                   <a class="nav-link {{ 'active' if active_page == 'provas' else '' }}" href="{{url_for('prova.listar_provas')}}">Provas</a>
-                  <a class="nav-link" href="#">Logout</a>
+                  <a class="nav-link" href="{{url_for('usuario.logout')}}">Logout</a>
                 </div>
               </div>
+              <!-- endif -->
             </div>
         </nav>
         
