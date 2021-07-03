@@ -18,7 +18,8 @@ def ver_aluno(_id):
     provas = (Aluno.query.join(AlunoProva, Aluno.id == AlunoProva.aluno_id)
                               .join(Prova, AlunoProva.prova_id == Prova.id)
                               .add_columns((Prova.id).label("prova_id"),
-                                           (Prova.descricao).label("descricao"))
+                                           (Prova.descricao).label("descricao"),
+                                           (AlunoProva.nota).label("nota"))
                               .filter(Aluno.id == _id)).all()
 
     return render_template("ver_aluno.html", aluno = aluno, provas = provas)
