@@ -1,7 +1,8 @@
 from provasonline import db, login_required
 from provasonline.prova.models.Prova import Opcao, Pergunta, Prova, Resposta, AlunoProva
-from provasonline.turma.models.Turma import Turma
+from provasonline.turma.models.Turma import Turma, AlunoTurma
 from provasonline.aluno.models.Aluno import Aluno
+from provasonline.professor.models.Professor import Professor
 from provasonline.constants import usuario_urole_roles
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
@@ -85,6 +86,22 @@ def ver_prova_correta(_id):
 # @login_required()
 def listar_provas():
     #TODO: listar provas das turmas do current_user
+
+    # PARA ALUNO
+    # provas = (AlunoTurma.query.join(Turma, Turma.id == AlunoTurma.turma_id)
+    #                           .join(Prova, Prova.turma == Turma.id)
+    #                           .add_columns((Prova.id).label("prova_id"),
+    #                                        (Prova.descricao).label("descricao"),
+    #                                        (Prova.data).label("data"))
+    #                           .filter(AlunoTurma.aluno_id == 15)).all() # mudar para current_user
+
+    # PARA PROFESSOR
+    # provas = (Professor.query.join(Turma, Turma.id_professor == Professor.id)
+    #                          .join(Prova, Prova.turma == Turma.id)
+    #                          .add_columns((Prova.id).label("prova_id"),
+    #                                       (Prova.descricao).label("descricao"),
+    #                                       (Prova.data).label("data"))
+    #                          .filter(Professor.id == 10)).all() # mudar para current_user
 
     provas = Prova.query.all()
     return render_template("listar_provas.html", provas = provas)
