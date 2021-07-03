@@ -44,3 +44,8 @@ def adicionar_alunos():
         id = id_turma
         return redirect(url_for('turma.adicionar_alunos', id=id))
     return render_template("adicionar_alunos.html", id = id, alunos = alunos)
+
+@turma.route("/ver_turma/<_id>", methods=["GET","POST"])
+def ver_turma(_id):
+    turma = Turma.query.get_or_404(_id)
+    return render_template("ver_turma.html", turma=turma)

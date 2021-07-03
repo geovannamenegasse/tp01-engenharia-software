@@ -14,7 +14,7 @@
         </div>
         <div class="card-body">
             {% for turma in turmas %}
-            <a href="{{url_for('turma.ver_turma', _id = turma.id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
+            <a href="{{url_for('turma.ver_turma', _id = turma.turma_id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
                 <div class="d-flex justify-content-start">
                     {{ turma.descricao }} 
                 </div>

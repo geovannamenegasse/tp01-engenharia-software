@@ -1,6 +1,6 @@
 from flask import Blueprint
 from provasonline.aluno.models.Aluno import Aluno
-from provasonline.turma.models.Turma import Turma
+from provasonline.turma.models.Turma import Turma, AlunoTurma
 from provasonline.prova.models.Prova import Prova, AlunoProva
 from flask import render_template, redirect, url_for, flash, request
 
@@ -22,4 +22,10 @@ def ver_aluno(_id):
                                            (AlunoProva.nota).label("nota"))
                               .filter(Aluno.id == _id)).all()
 
-    return render_template("ver_aluno.html", aluno = aluno, provas = provas)
+    turmas = (Aluno.query.join(AlunoTurma, Aluno.id == AlunoTurma.aluno_id)
+                              .join(Turma, AlunoTurma.turma_id == Turma.id)
+                              .add_columns((Turma.id).label("turma_id"),
+                                           (Turma.descricao).label("descricao"))
+                              .filter(Aluno.id == _id)).all()
+
+    return render_template("ver_aluno.html", aluno = aluno, provas = provas, turmas = turmas)
