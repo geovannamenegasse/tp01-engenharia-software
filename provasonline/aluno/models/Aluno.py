@@ -17,7 +17,7 @@ class Aluno(Usuario):
 
 	__tablename__ = 'aluno'
 	id = db.Column(db.Integer, db.ForeignKey('usuario.id'), primary_key=True)
-	turmas = db.relationship("Turma", secondary=AlunoTurma, back_populates="alunos")
+	# turmas = db.relationship("Turma", secondary=AlunoTurma, back_populates="alunos")
 	# provas = db.relationship("Prova", secondary=AlunoProva, back_populates="alunos")
 
 	def __init__(self, nome, login, senha, urole):

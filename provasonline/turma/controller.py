@@ -2,7 +2,8 @@ import re
 from provasonline import db, login_required
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
-from provasonline.turma.models.Turma import Turma
+from provasonline.turma.models.Turma import Turma , AlunoTurma
+from provasonline.aluno.models.Aluno import Aluno
 import json
 
 turma = Blueprint('turma', __name__, template_folder='templates')
@@ -29,19 +30,17 @@ def cadastrar_turma():
 @turma.route("/adicionar_alunos", methods=["GET", "POST"])
 def adicionar_alunos():
     id = request.args.get('id')
-    # if request.method == 'POST':
-        # id = request.form['id']
-        # nome = request.form['nome']
-        # nome = "%{}%".format(nome)
-        # alunos = Aluno.query.all(Turma.nome.like(search), Turma.email.like(search) )
-        # shows = [
-            # {"nome": 1, "email": "Sesaeme Street"},
-            # {"id": 2, "name": "Dora The Explorer"},
-        # ]
-    return render_template("adicionar_alunos.html", id = id)
+    alunos = db.session.query(Aluno, AlunoTurma).outerjoin(AlunoTurma, (Aluno.id == AlunoTurma.aluno_id) & (AlunoTurma.turma_id == id)).all()
 
-@turma.route("/ver_turma/<_id>", methods=["GET","POST"])
-def ver_turma(_id):
-    turma = Turma.query.get_or_404(_id)
-    return render_template("ver_turma.html", turma=turma)
-
+    if request.method == 'POST':
+        lista_id = request.form.getlist('alunos')
+        id_turma = request.form['id_turma']
+        AlunoTurma.query.filter(AlunoTurma.turma_id == id_turma).delete()
+        db.session.commit()
+        for id_user in lista_id:
+            alunoturma = AlunoTurma(id_user, id_turma)
+            db.session.add(alunoturma)
+            db.session.commit()
+        id = id_turma
+        return redirect(url_for('turma.adicionar_alunos', id=id))
+    return render_template("adicionar_alunos.html", id = id, alunos = alunos)

@@ -12,6 +12,7 @@ LISTAR turmas
             <tr>
                 <td>Nome</td>
                 <td>Descricao</td>
+                <td>Professor</td>
                 <td>Ação</td>
             </tr>
         </thead>
@@ -19,6 +20,7 @@ LISTAR turmas
             <tr>
                 <td>{{ t.nome }}</td>
                 <td>{{ t.descricao }}</td>
+                <td></td>
                 <td>
                     <a href="{{ url_for('turma.adicionar_alunos', id=t.id) }}">
                         <button type="submit" class="btn btn-primary">
