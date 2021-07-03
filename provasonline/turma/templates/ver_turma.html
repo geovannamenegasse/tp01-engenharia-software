@@ -2,6 +2,48 @@
 
 {% block content %}
 
-PARTICIPANTES DA TURMA {{turma.descricao}}
+{% for t in turmas %}
+
+<div class="col-sm-12 p-2">
+    <div class="container">
+        <div class="title">
+            <h3>Turma: {{t.nome}}</h3>
+        </div>
+        <div class="body">
+            <div class="card">
+                <div class="card-header">
+                    Professor
+                </div>
+                <div class="card-body">
+                    {% for p in professores %}
+                        {{p[0].nome}}
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    Descricao
+                </div>
+                <div class="card-body">
+                     {{ t.descricao }}
+                </div>
+            </div>
+            <br>
+            <div class="card">
+                <div class="card-header">
+                    Ações
+                </div>
+                <div class="card-body">
+                    <a href="{{url_for('turma.editar_turma', id = t.id)}}"><button type="submit" class="btn btn-primary">Editar Turma</button></a>
+                    <a href="{{url_for('turma.adicionar_alunos', id = t.id)}}"><button type="submit" class="btn btn-primary">Adicionar / Remover Alunos</button></a>
+                    <a href="{{url_for('turma.adicionar_professor', id = t.id)}}"><button type="submit" class="btn btn-primary">Adicionar / Remover Professor</button></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
 
 {% endblock %}

@@ -1,5 +1,4 @@
 from provasonline import db
-
 class Turma(db.Model):
     __tablename__ = 'turma'
     id              = db.Column(db.Integer, primary_key = True)
@@ -21,4 +20,4 @@ class AlunoTurma(db.Model):
 
     def __init__(self, aluno_id, turma_id):
         self.aluno_id = aluno_id
-        self.turma_id = turma_id
+        self.turma_id   = turma_id
