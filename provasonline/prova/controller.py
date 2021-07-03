@@ -87,18 +87,13 @@ def listar_provas():
 @prova.route("/responder_prova/<_id>", methods=["GET","POST"])
 # @login_required()
 def responder_prova(_id):
-    prova = Prova.query.get_or_404(_id)  
-    
-    aluno = Aluno.query.get_or_404(15)
+    prova = Prova.query.get_or_404(_id)      
 
     #TODO: se ja tiver essa prova respondida pra esse aluno, bloqueia
     #TODO: remover a permissão do botão para o professor
 
     if request.method == 'POST':
-        
-        aluno.provas.append(prova)  # mudar para current user  
-        # nota = 0
-        
+        nota = 0        
         for p in prova.perguntas: 
             opcao = request.form['op'+str(p.id)]
             
@@ -106,11 +101,15 @@ def responder_prova(_id):
 
             if (aux.correta == 1):                
                 resposta = Resposta(_id, p.id, opcao, 1, 8) # mudar para current user 
-                # nota = nota + aux.valor
+                nota = nota + p.valor
             else:
                 resposta = Resposta(_id, p.id, opcao, 0, 8) # mudar para current user 
 
-            db.session.add(resposta)    
+            db.session.add(resposta)   
+        
+        aluno_prova = AlunoProva(15, _id, nota) # mudar para current user 
+        db.session.add(aluno_prova)   
+
         db.session.commit()    
 
         flash("Prova respondida com sucesso!")

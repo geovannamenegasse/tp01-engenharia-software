@@ -1,7 +1,7 @@
 from flask import Blueprint
 from provasonline.aluno.models.Aluno import Aluno
 from provasonline.turma.models.Turma import Turma
-from provasonline.prova.models.Prova import Prova
+from provasonline.prova.models.Prova import Prova, AlunoProva
 from flask import render_template, redirect, url_for, flash, request
 
 aluno = Blueprint('aluno', __name__, template_folder='templates')
@@ -14,6 +14,11 @@ def listar_alunos():
 @aluno.route("/ver_aluno/<_id>", methods=["GET","POST"])
 def ver_aluno(_id):
     aluno = Aluno.query.get_or_404(_id)
-    turmas = aluno.turmas
-    provas = aluno.provas
-    return render_template("ver_aluno.html", aluno = aluno, turmas = turmas, provas = provas)
+
+    provas = (Aluno.query.join(AlunoProva, Aluno.id == AlunoProva.aluno_id)
+                              .join(Prova, AlunoProva.prova_id == Prova.id)
+                              .add_columns((Prova.id).label("prova_id"),
+                                           (Prova.descricao).label("descricao"))
+                              .filter(Aluno.id == _id)).all()
+
+    return render_template("ver_aluno.html", aluno = aluno, provas = provas)
