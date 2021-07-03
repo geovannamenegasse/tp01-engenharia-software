@@ -20,6 +20,7 @@ usuario = Blueprint('usuario', __name__, template_folder='templates')
 # @login_required()
 def index():
     # if current_user.is_authenticated:
+    # TODO: mostrar provas de hoje
     #     return render_template('inicio.html')   
     return redirect(url_for('usuario.login'))
             
