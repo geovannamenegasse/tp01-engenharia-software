@@ -1,41 +1,44 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h2 style="text-align: center;">Cadastro de Usuário</h2>
 <div class="container">
-<form action="" method="POST">
-	{{ form.csrf_token }}
-	<div class="form-group">
-		{{form.nome.label}}
-		{{form.nome}}
-	</div>
-	{% for e in form.errors.nome %}
-	<div class="alert alert-danger">{{ e }}</div>
-	{% endfor %}
+	<form action="" method="POST">
+		{{ form.csrf_token }}
+		<div class="form-group row">
+			<label class="col-12 col-lg-6 offset-lg-1 col-form-label">{{form.nome.label}}</label>
+			<div class="col-12 col-lg-6 offset-lg-1">{{form.nome}}</div>
+		</div>
+		{% for e in form.errors.nome %}
+		<div class="alert alert-danger">{{ e }}</div>
+		{% endfor %}
 
-	<div class="form-group">
-		{{form.login.label}}
-		{{form.login}}
-	</div>
-	{% for e in form.errors.login %}
-	<div class="alert alert-danger">{{ e }}</div>
-	{% endfor %}
+		<div class="form-group row">
+			<label class="col-12 col-lg-6 offset-lg-1 col-form-label">{{form.login.label}}</label>
+			<div class="col-12 col-lg-6 offset-lg-1">{{form.login}}</div>
+		</div>
+		{% for e in form.errors.login %}
+		<div class="alert alert-danger">{{ e }}</div>
+		{% endfor %}
 
-	<div class="form-group">
-		{{form.senha.label}}
-		{{form.senha}}
-	</div>
-	{% for e in form.errors.senha %}
-	<div class="alert alert-danger">{{ e }}</div>
-	{% endfor %}
+		<div class="form-group row">
+			<label class="col-12 col-lg-6 offset-lg-1 col-form-label">{{form.senha.label}}</label>
+			<div class="col-12 col-lg-6 offset-lg-1">{{form.senha}}</div>
+		</div>
+		{% for e in form.errors.senha %}
+		<div class="alert alert-danger">{{ e }}</div>
+		{% endfor %}
 
-	<div class="row mb-3 col-md-4">
-	Você é
-	<select name="urole" class="form-select">
-		<option value="aluno">Aluno</option>
-		<option value="professor">Professor</option>
-	</select>
-	</div>
-	{{form.submit(class_='btn btn-primary')}}
-</form>
+		<div class="form-group row">
+			<label class="col-12 col-lg-6 offset-lg-1 col-form-label">Função no sistema</label>
+			<div class="col-12 col-lg-6 offset-lg-1">
+				<select name="urole" class="form-select">
+					<option value="aluno">Aluno</option>
+					<option value="professor">Professor</option>
+				</select>
+			</div>
+		</div>
+		{{form.submit(class_='btn btn-primary')}}
+	</form>
 </div>
 {% endblock %}
