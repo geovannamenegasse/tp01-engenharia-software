@@ -152,5 +152,5 @@ def prova_respondida(_id):
 #@login_required(role=[usuario_urole_roles['ALUNO']])
 def ver_correcao(id_prova):
     prova = Prova.query.get_or_404(id_prova)
-    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == current_user.id).all()
+    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == 8).all() #alterar depois que o login tiver pronto
     return render_template("ver_correcao.html", prova = prova, respostas = respostas)
