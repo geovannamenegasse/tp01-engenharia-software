@@ -5,6 +5,7 @@
     <div class="container">
         <div class="mb-4">
             <h4>{{ prova.descricao }}</h4>
+            <h6>Sua nota: {{nota}}/{{prova.valor}}</h6>
         </div>
 
         <script>cont = 1;</script>
@@ -45,6 +46,6 @@
 
         <script>cont++;</script>  
         {% endfor %}
-    </div>    
+    </div>  
 
 {% endblock %}
