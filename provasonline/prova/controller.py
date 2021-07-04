@@ -147,3 +147,10 @@ def prova_respondida(_id):
     prova = Prova.query.get_or_404(_id)
     respostas = Resposta.query.filter(Resposta.prova == _id).all() # filtrar pelo aluno tb
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)
+
+@prova.route("/ver_correcao/<id_prova>", methods=["GET","POST"])
+#@login_required(role=[usuario_urole_roles['ALUNO']])
+def ver_correcao(id_prova):
+    prova = Prova.query.get_or_404(id_prova)
+    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == current_user.id).all()
+    return render_template("ver_correcao.html", prova = prova, respostas = respostas)
