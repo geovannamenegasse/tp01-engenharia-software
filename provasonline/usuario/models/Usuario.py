@@ -1,11 +1,12 @@
+
 from provasonline import db, login_manager
 from sqlalchemy.sql import case
 from flask_bcrypt import Bcrypt
 from flask_login import UserMixin
 
 @login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(user_id) 
+def load_user(id):
+    return Usuario.query.filter_by(id = id).first() 
 
 class Usuario(db.Model, UserMixin):
     bcrypt = Bcrypt()
@@ -35,3 +36,6 @@ class Usuario(db.Model, UserMixin):
     def setSenha(self, senha):
         self.senha = self.bcrypt.generate_password_hash(senha).decode('utf-8')
         return self.senha
+    
+    def get_id(self):
+        return self.id
