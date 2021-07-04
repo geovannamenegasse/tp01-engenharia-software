@@ -1,5 +1,17 @@
 from provasonline import db
 
+
+class AlunoProva(db.Model):
+    __tablename__ = 'aluno_prova'
+    aluno_id = db.Column(db.Integer, db.ForeignKey('aluno.id', ondelete = 'CASCADE'), nullable = False, primary_key = True)
+    prova_id = db.Column(db.Integer, db.ForeignKey('prova.id', ondelete = 'CASCADE'), nullable = False, primary_key = True)
+    nota     = db.Column(db.Integer, nullable = False)
+
+    def __init__(self, aluno_id, prova_id, nota):
+        self.aluno_id = aluno_id
+        self.prova_id = prova_id
+        self.nota     = nota
+
 class Prova(db.Model):
 
     __tablename__ = 'prova'
@@ -8,14 +20,16 @@ class Prova(db.Model):
     data        = db.Column(db.Date, nullable = False)
     valor       = db.Column(db.Integer, nullable = True)
     professor   = db.Column(db.Integer, db.ForeignKey('professor.id', ondelete = 'CASCADE'), nullable = True)
-
-    perguntas = db.relationship("Pergunta", backref='perguntas', lazy='dynamic')
+    turma       = db.Column(db.Integer, db.ForeignKey('turma.id', ondelete = 'CASCADE'), nullable = True)
     
-    def __init__(self, data, descricao, valor, professor):
+    perguntas   = db.relationship("Pergunta", backref='perguntas', lazy='dynamic')
+    
+    def __init__(self, data, descricao, valor, professor, turma):
         self.data      = data
         self.descricao = descricao
         self.valor     = valor
         self.professor = professor
+        self.turma     = turma
 
 class Pergunta(db.Model):
 

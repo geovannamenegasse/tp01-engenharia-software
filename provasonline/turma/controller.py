@@ -2,15 +2,52 @@ import re
 from provasonline import db, login_required
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
-from provasonline.turma.models.Turma import Turma
+from provasonline.turma.models.Turma import Turma , AlunoTurma
+from provasonline.aluno.models.Aluno import Aluno
+from provasonline.usuario.models.Usuario import Usuario
 import json
 
 turma = Blueprint('turma', __name__, template_folder='templates')
+
+@turma.route("/editar_turma", methods=["GET","POST"])
+def editar_turma():
+    id_turma = request.args.get('id')
+    turmas = Turma.query.filter(Turma.id == id_turma).all()
+    turmas = turmas[0]
+    if request.method == 'POST':
+        nome = request.form['nome']
+        descricao = request.form['descricao']
+        db.session.query(Turma).filter(Turma.id == id_turma).update({Turma.nome: nome, Turma.descricao : descricao})
+        db.session.commit()
+    return render_template("editar_turma.html", turma=turmas)
+
+@turma.route("/adicionar_professor", methods=["GET","POST"])
+def adicionar_professor():
+    id = request.args.get('id')
+
+    professores = db.session.query(Usuario, Turma).outerjoin(Turma, (Usuario.id == Turma.id_professor) & (Turma.id == id)).filter(Usuario.urole == 'professor' ).all()
+    # Mudar "Usuario" para professor
+    if request.method == 'POST':
+        lista_id = request.form.getlist('professor')
+        id_turma = request.form['id_turma']
+        db.session.query(Turma).filter(Turma.id == id_turma).update({Turma.id_professor: lista_id[0]})
+        db.session.commit()
+ 
+        return redirect(url_for('turma.adicionar_professor', id=id))
+
+    return render_template("adicionar_professor.html", professores=professores)
 
 @turma.route("/listar_turmas", methods=["GET","POST"])
 def listar_turmas():
     turmas = Turma.query.all()
     return render_template("listar_turmas.html", turmas=turmas)
+
+@turma.route("/ver_turma", methods=["GET","POST"])
+def ver_turma():
+    id_turma = request.args.get('id')
+    professores = db.session.query(Usuario, Turma).outerjoin(Turma, (Usuario.id == Turma.id_professor) & (Turma.id == id_turma)).filter(Turma.id_professor == Usuario.id).all()
+    turmas = Turma.query.filter(Turma.id == id_turma).all()
+    return render_template("ver_turma.html", turmas=turmas, professores=professores)
 
 @turma.route("/cadastrar_turma", methods=["GET", "POST"])
 def cadastrar_turma():
@@ -29,19 +66,17 @@ def cadastrar_turma():
 @turma.route("/adicionar_alunos", methods=["GET", "POST"])
 def adicionar_alunos():
     id = request.args.get('id')
-    # if request.method == 'POST':
-        # id = request.form['id']
-        # nome = request.form['nome']
-        # nome = "%{}%".format(nome)
-        # alunos = Aluno.query.all(Turma.nome.like(search), Turma.email.like(search) )
-        # shows = [
-            # {"nome": 1, "email": "Sesaeme Street"},
-            # {"id": 2, "name": "Dora The Explorer"},
-        # ]
-    return render_template("adicionar_alunos.html", id = id)
+    alunos = db.session.query(Aluno, AlunoTurma).outerjoin(AlunoTurma, (Aluno.id == AlunoTurma.aluno_id) & (AlunoTurma.turma_id == id)).all()
 
-@turma.route("/ver_turma/<_id>", methods=["GET","POST"])
-def ver_turma(_id):
-    turma = Turma.query.get_or_404(_id)
-    return render_template("ver_turma.html", turma=turma)
-
+    if request.method == 'POST':
+        lista_id = request.form.getlist('alunos')
+        id_turma = request.form['id_turma']
+        AlunoTurma.query.filter(AlunoTurma.turma_id == id_turma).delete()
+        db.session.commit()
+        for id_user in lista_id:
+            alunoturma = AlunoTurma(id_user, id_turma)
+            db.session.add(alunoturma)
+            db.session.commit()
+        id = id_turma
+        return redirect(url_for('turma.adicionar_alunos', id=id))
+    return render_template("adicionar_alunos.html", id = id, alunos = alunos)

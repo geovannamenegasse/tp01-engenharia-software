@@ -1,5 +1,8 @@
 from provasonline import db, login_required
-from provasonline.prova.models.Prova import Opcao, Pergunta, Prova, Resposta
+from provasonline.prova.models.Prova import Opcao, Pergunta, Prova, Resposta, AlunoProva
+from provasonline.turma.models.Turma import Turma, AlunoTurma
+from provasonline.aluno.models.Aluno import Aluno
+from provasonline.professor.models.Professor import Professor
 from provasonline.constants import usuario_urole_roles
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
@@ -16,8 +19,9 @@ def cadastrar_prova():
 
         descricao = request.form['prova']
         data      = datetime.strptime(request.form['data'], '%Y-%m-%d').date()
+        turma     = request.form['turma']
         #TODO: professor como current_user (preciso do login pronto)
-        prova     = Prova(data, descricao, 0, 9)
+        prova     = Prova(data, descricao, 0, 9, turma)
         db.session.add(prova)
         db.session.commit()
 
@@ -69,38 +73,66 @@ def cadastrar_prova():
         flash("Prova cadastrada com sucesso")
         return redirect(url_for('prova.listar_provas'))    
 
-    return render_template("cadastrar_prova.html")
+    turmas = Turma.query.all()
+    return render_template("cadastrar_prova.html", turmas = turmas)
+
+@prova.route("/ver_prova_correta/<_id>", methods=["GET","POST"])
+# @login_required(role=[usuario_urole_roles['PROFESSOR']])
+def ver_prova_correta(_id):
+    prova = Prova.query.get_or_404(_id)
+    return render_template("ver_prova_correta.html", prova = prova)
 
 @prova.route("/listar_provas", methods=["GET","POST"])
 # @login_required()
 def listar_provas():
-    #TODO: listar provas do current_user
-    #TODO: separar tipo de listagem de aluno e professor
+    #TODO: listar provas das turmas do current_user
+
+    # PARA ALUNO
+    # provas = (AlunoTurma.query.join(Turma, Turma.id == AlunoTurma.turma_id)
+    #                           .join(Prova, Prova.turma == Turma.id)
+    #                           .add_columns((Prova.id).label("prova_id"),
+    #                                        (Prova.descricao).label("descricao"),
+    #                                        (Prova.data).label("data"))
+    #                           .filter(AlunoTurma.aluno_id == 15)).all() # mudar para current_user
+
+    # PARA PROFESSOR
+    # provas = (Professor.query.join(Turma, Turma.id_professor == Professor.id)
+    #                          .join(Prova, Prova.turma == Turma.id)
+    #                          .add_columns((Prova.id).label("prova_id"),
+    #                                       (Prova.descricao).label("descricao"),
+    #                                       (Prova.data).label("data"))
+    #                          .filter(Professor.id == 10)).all() # mudar para current_user
 
     provas = Prova.query.all()
     return render_template("listar_provas.html", provas = provas)
 
 @prova.route("/responder_prova/<_id>", methods=["GET","POST"])
-# @login_required()
+# @login_required(role=[usuario_urole_roles['ALUNO']])
 def responder_prova(_id):
-    prova = Prova.query.get_or_404(_id) 
+    prova = Prova.query.get_or_404(_id)      
 
-    #TODO: se ja tiver essa prova respondida pra esse aluno, bloqueia
-    #TODO: aluno como current_user (preciso do login pronto)
-    #TODO: remover a permissão do botão para o professor
+    if AlunoProva.query.filter(AlunoProva.prova_id == _id, AlunoProva.aluno_id == 15).first():
+        flash("Você já respondeu essa prova!")
+        return redirect(url_for('prova.prova_respondida', _id = _id)) 
 
     if request.method == 'POST':
+        nota = 0        
         for p in prova.perguntas: 
             opcao = request.form['op'+str(p.id)]
             
             aux = Opcao.query.get_or_404(opcao)
 
             if (aux.correta == 1):                
-                resposta = Resposta(_id, p.id, opcao, 1, 8)
+                resposta = Resposta(_id, p.id, opcao, 1, 8) # mudar para current user 
+                nota = nota + p.valor
             else:
-                resposta = Resposta(_id, p.id, opcao, 0, 8)
+                resposta = Resposta(_id, p.id, opcao, 0, 8) # mudar para current user 
 
-            db.session.add(resposta)    
+            db.session.add(resposta)   
+        
+        aluno_prova = AlunoProva(15, _id, nota) # mudar para current user 
+        db.session.add(aluno_prova)   
+
         db.session.commit()    
 
         flash("Prova respondida com sucesso!")
@@ -111,6 +143,18 @@ def responder_prova(_id):
 @prova.route("/prova_respondida/<_id>", methods=["GET","POST"])
 # @login_required()
 def prova_respondida(_id):
+    # TODO: PEGAR RESPOSTA DA PROVA DO ALUNO E MOSTRAR NOTA E CORREÇÃO
     prova = Prova.query.get_or_404(_id)
-    respostas = Resposta.query.filter(Resposta.prova == _id).all()
+    respostas = Resposta.query.filter(Resposta.prova == _id).all() # filtrar pelo aluno tb
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)
+
+@prova.route("/ver_correcao/<id_prova>", methods=["GET","POST"])
+#@login_required(role=[usuario_urole_roles['ALUNO']])
+def ver_correcao(id_prova):
+    prova = Prova.query.get_or_404(id_prova)
+    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == 8).all() #alterar depois que o login tiver pronto
+    nota = 0
+    for resposta in respostas:
+        if resposta.acertou:
+            nota = nota + resposta.pergunta_obj.valor
+    return render_template("ver_correcao.html", prova = prova, respostas = respostas, nota = nota)

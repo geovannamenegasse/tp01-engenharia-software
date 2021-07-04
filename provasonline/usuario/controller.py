@@ -19,7 +19,11 @@ usuario = Blueprint('usuario', __name__, template_folder='templates')
 @usuario.route('/inicio')
 @usuario.route('/', methods=['GET','POST'])
 def index():
-    return render_template('inicio.html')         
+    # if current_user.is_authenticated:
+    # TODO: mostrar provas de hoje
+    #     return render_template('inicio.html')   
+    return redirect(url_for('usuario.login'))
+            
    
 ######################################################################
 ########                        LOGIN                          #######
@@ -53,13 +57,13 @@ def login():
 ######################################################################
 
 @usuario.route('/logout', methods=['GET','POST'])
-@login_required()
+# @login_required()
 def logout():
     logout_user()
     return redirect(url_for('usuario.index'))
 
 @usuario.route('/cadastrar_usuario', methods=['GET','POST'])
-#@login_required()
+# @login_required()
 def cadastrar_usuario():
     form = UsuarioForm()
     if request.method == 'POST':
