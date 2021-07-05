@@ -149,10 +149,10 @@ def prova_respondida(_id):
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)
 
 @prova.route("/ver_correcao/<id_prova>", methods=["GET","POST"])
-#@login_required(role=[usuario_urole_roles['ALUNO']])
+@login_required(role=[usuario_urole_roles['ALUNO']])
 def ver_correcao(id_prova):
     prova = Prova.query.get_or_404(id_prova)
-    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == 8).all() #alterar depois que o login tiver pronto
+    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == current_user.id).all()
     nota = 0
     for resposta in respostas:
         if resposta.acertou:
