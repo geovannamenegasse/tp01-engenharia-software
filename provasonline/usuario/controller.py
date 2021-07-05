@@ -2,6 +2,7 @@ import os
 from provasonline.usuario.models.Usuario import Usuario, load_user
 from provasonline.professor.models.Professor import Professor
 from provasonline.aluno.models.Aluno import Aluno
+from provasonline.turma.models.Turma import Turma, AlunoTurma
 from flask import render_template, request, redirect, url_for, flash
 from provasonline import login_required
 from flask_login import LoginManager, current_user, login_user, logout_user
@@ -20,10 +21,15 @@ usuario = Blueprint('usuario', __name__, template_folder='templates')
 @usuario.route('/', methods=['GET','POST'])
 @login_required()
 def index():
-    if current_user.is_authenticated:
-    # TODO: mostrar provas de hoje
-        return render_template('inicio.html')   
-    return redirect(url_for('usuario.login'))
+    if current_user.urole == "professor":
+        turmas = Turma.query.filter_by(id_professor = current_user.id)
+    else:
+        id_turmas = []
+        turmas_aluno = AlunoTurma.query.filter_by(aluno_id = current_user.id)
+        for turma in turmas_aluno:
+            id_turmas.append(turma.turma_id)
+        turmas = Turma.query.filter(Turma.id.in_(id_turmas))
+    return render_template('inicio.html', turmas = turmas)
             
    
 ######################################################################
