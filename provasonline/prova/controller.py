@@ -86,25 +86,24 @@ def ver_prova_correta(_id):
 @prova.route("/listar_provas", methods=["GET","POST"])
 @login_required()
 def listar_provas():
-    #TODO: listar provas das turmas do current_user
-
-    # PARA ALUNO
-    # provas = (AlunoTurma.query.join(Turma, Turma.id == AlunoTurma.turma_id)
-    #                           .join(Prova, Prova.turma == Turma.id)
-    #                           .add_columns((Prova.id).label("prova_id"),
-    #                                        (Prova.descricao).label("descricao"),
-    #                                        (Prova.data).label("data"))
-    #                           .filter(AlunoTurma.aluno_id == 15)).all() # mudar para current_user
-
-    # PARA PROFESSOR
-    # provas = (Professor.query.join(Turma, Turma.id_professor == Professor.id)
-    #                          .join(Prova, Prova.turma == Turma.id)
-    #                          .add_columns((Prova.id).label("prova_id"),
-    #                                       (Prova.descricao).label("descricao"),
-    #                                       (Prova.data).label("data"))
-    #                          .filter(Professor.id == 10)).all() # mudar para current_user
-
     provas = Prova.query.all()
+    
+    if current_user.urole == 'aluno':
+        provas = (AlunoTurma.query.join(Turma, Turma.id == AlunoTurma.turma_id)
+                                .join(Prova, Prova.turma == Turma.id)
+                                .add_columns((Prova.id).label("prova_id"),
+                                            (Prova.descricao).label("descricao"),
+                                            (Prova.data).label("data"))
+                                .filter(AlunoTurma.aluno_id == current_user.id)).all() 
+    else:
+        provas = (Professor.query.join(Turma, Turma.id_professor == Professor.id)
+                                .join(Prova, Prova.turma == Turma.id)
+                                .add_columns((Prova.id).label("prova_id"),
+                                            (Prova.descricao).label("descricao"),
+                                            (Prova.data).label("data"))
+                                .filter(Professor.id == current_user.id)).all() 
+
+    
     return render_template("listar_provas.html", provas = provas)
 
 @prova.route("/responder_prova/<_id>", methods=["GET","POST"])

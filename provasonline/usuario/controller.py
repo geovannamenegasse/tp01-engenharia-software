@@ -61,7 +61,7 @@ def login():
 @login_required()
 def logout():
     logout_user()
-    return redirect(url_for('usuario.index'))
+    return redirect(url_for('usuario.login'))
 
 @usuario.route('/cadastrar_usuario', methods=['GET','POST'])
 # @login_required()

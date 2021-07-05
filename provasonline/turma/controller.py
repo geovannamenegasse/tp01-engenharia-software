@@ -1,5 +1,6 @@
 import re
 from provasonline import db, login_required
+from flask_login import LoginManager, current_user
 from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
 from provasonline.turma.models.Turma import Turma , AlunoTurma
@@ -43,7 +44,7 @@ def adicionar_professor():
 @turma.route("/listar_turmas", methods=["GET","POST"])
 @login_required(role=[usuario_urole_roles['PROFESSOR']])
 def listar_turmas():
-    turmas = Turma.query.all()
+    turmas = Turma.query.filter(Turma.id_professor == current_user.id)    
     return render_template("listar_turmas.html", turmas=turmas)
 
 @turma.route("/ver_turma", methods=["GET","POST"])
@@ -65,7 +66,7 @@ def cadastrar_turma():
         turma     = Turma(descricao, nome)
         db.session.add(turma)
         db.session.commit()
-        flash("Prova cadastrada com sucesso")
+        flash("Turma cadastrada com sucesso")
         return redirect(url_for('turma.listar_turmas'))
     return render_template("cadastrar_turma.html")
 

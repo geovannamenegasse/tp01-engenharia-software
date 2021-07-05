@@ -4,9 +4,14 @@
 
 {% block content %}
 
-LISTAR turmas
+<div class="container">
+
+    <div class="d-flex justify-content-end mb-2">
+        <a href="{{url_for('turma.cadastrar_turma')}}" type="button" class="btn btn-primary" role="button">Nova Turma</a>
+    </div>    
+    
 {% for t in turmas %}
-<div class="col-sm-12 p-2">
+<div class="col-md-12 mb-2">
     <a href="{{ url_for('turma.ver_turma', id=t.id) }}" type="button" class="btn btn-outline-secondary col-md-12 mb-2" role="button">
         <div class="d-flex justify-content-start">
             {{ t.nome }} 
@@ -17,5 +22,6 @@ LISTAR turmas
     </a>
 </div>
 {% endfor %}
+</div>
 
 {% endblock %}
