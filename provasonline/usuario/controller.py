@@ -19,9 +19,9 @@ usuario = Blueprint('usuario', __name__, template_folder='templates')
 @usuario.route('/inicio')
 @usuario.route('/', methods=['GET','POST'])
 def index():
-    # if current_user.is_authenticated:
+    if current_user.is_authenticated:
     # TODO: mostrar provas de hoje
-    #     return render_template('inicio.html')   
+        return render_template('inicio.html')   
     return redirect(url_for('usuario.login'))
             
    
