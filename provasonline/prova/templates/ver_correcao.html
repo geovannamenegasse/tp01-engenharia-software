@@ -33,6 +33,11 @@
                         </div>
                         <input type="text" class="form-control" style="background-color: #ff8080;" value="{{ opcao.descricao }}" disabled>
                         {% endif %}
+                    {% elif opcao.correta %}
+                        <div class="input-group-text" style="background-color: #6ade6e;">
+                            <input class="form-check-input mt-0" type="radio" name="op{{ resposta.pergunta_obj.id }}" value="{{ opcao.id }}" disabled>
+                        </div>
+                        <input type="text" class="form-control" style="background-color: #6ade6e;" value="{{ opcao.descricao }}" disabled>
                     {% else %}
                     <div class="input-group-text">
                         <input class="form-check-input mt-0" type="radio" name="op{{ resposta.pergunta_obj.id }}" value="{{ opcao.id }}" disabled>

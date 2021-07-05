@@ -5,11 +5,13 @@ from flask import render_template, redirect, url_for, flash, request
 from provasonline.turma.models.Turma import Turma , AlunoTurma
 from provasonline.aluno.models.Aluno import Aluno
 from provasonline.usuario.models.Usuario import Usuario
+from provasonline.constants import usuario_urole_roles
 import json
 
 turma = Blueprint('turma', __name__, template_folder='templates')
 
 @turma.route("/editar_turma", methods=["GET","POST"])
+@login_required(role=[usuario_urole_roles['PROFESSOR']])
 def editar_turma():
     id_turma = request.args.get('id')
     turmas = Turma.query.filter(Turma.id == id_turma).all()
@@ -22,6 +24,7 @@ def editar_turma():
     return render_template("editar_turma.html", turma=turmas)
 
 @turma.route("/adicionar_professor", methods=["GET","POST"])
+@login_required(role=[usuario_urole_roles['PROFESSOR']])
 def adicionar_professor():
     id = request.args.get('id')
 
@@ -38,11 +41,13 @@ def adicionar_professor():
     return render_template("adicionar_professor.html", professores=professores)
 
 @turma.route("/listar_turmas", methods=["GET","POST"])
+@login_required(role=[usuario_urole_roles['PROFESSOR']])
 def listar_turmas():
     turmas = Turma.query.all()
     return render_template("listar_turmas.html", turmas=turmas)
 
 @turma.route("/ver_turma", methods=["GET","POST"])
+@login_required()
 def ver_turma():
     id_turma = request.args.get('id')
     professores = db.session.query(Usuario, Turma).outerjoin(Turma, (Usuario.id == Turma.id_professor) & (Turma.id == id_turma)).filter(Turma.id_professor == Usuario.id).all()
@@ -50,6 +55,7 @@ def ver_turma():
     return render_template("ver_turma.html", turmas=turmas, professores=professores)
 
 @turma.route("/cadastrar_turma", methods=["GET", "POST"])
+@login_required(role=[usuario_urole_roles['PROFESSOR']])
 def cadastrar_turma():
     if request.method == 'POST':
 
@@ -64,6 +70,7 @@ def cadastrar_turma():
     return render_template("cadastrar_turma.html")
 
 @turma.route("/adicionar_alunos", methods=["GET", "POST"])
+@login_required(role=[usuario_urole_roles['PROFESSOR']])
 def adicionar_alunos():
     id = request.args.get('id')
     alunos = db.session.query(Aluno, AlunoTurma).outerjoin(AlunoTurma, (Aluno.id == AlunoTurma.aluno_id) & (AlunoTurma.turma_id == id)).all()
