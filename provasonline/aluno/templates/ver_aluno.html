@@ -33,7 +33,7 @@
         </div>
         <div class="card-body">
             {% for prova in provas %}
-            <a href="{{url_for('prova.ver_correcao', id_prova = prova.prova_id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
+            <a href="{{url_for('prova.ver_correcao', id_prova = prova.prova_id, id_aluno = aluno.id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
                 <div class="d-flex justify-content-between">
                     <div>{{ prova.descricao }}</div>
                     <div>Nota: {{ prova.nota }}&nbsp;</div>

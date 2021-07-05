@@ -121,7 +121,7 @@ def responder_prova(_id):
     turma = Turma.query.get_or_404(prova.turma)    
 
     if AlunoProva.query.filter(AlunoProva.prova_id == _id, AlunoProva.aluno_id == current_user.id).first():
-        return redirect(url_for('prova.ver_correcao', id_prova = _id)) 
+        return redirect(url_for('prova.ver_correcao', id_prova = _id, id_aluno = current_user.id)) 
 
     if request.method == 'POST':
         nota = 0        
@@ -156,12 +156,12 @@ def prova_respondida(_id):
     respostas = Resposta.query.filter(Resposta.prova == _id).all() # filtrar pelo aluno tb
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)
 
-@prova.route("/ver_correcao/<id_prova>", methods=["GET","POST"])
+@prova.route("/ver_correcao/<id_prova>/<id_aluno>", methods=["GET","POST"])
 @login_required()
-def ver_correcao(id_prova):
+def ver_correcao(id_prova, id_aluno):
     prova = Prova.query.get_or_404(id_prova)
     turma = Turma.query.get_or_404(prova.turma) 
-    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == current_user.id).all()
+    respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == id_aluno).all()
     nota = 0
     for resposta in respostas:
         if resposta.acertou:
