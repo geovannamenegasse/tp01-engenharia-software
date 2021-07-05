@@ -19,7 +19,7 @@
                 <select class="form-select" id="turma" name="turma" aria-label="Default select example" required>
                     <option value="" selected></option>
                     {% for turma in turmas %}
-                    <option value="{{turma.id}}">{{turma.descricao}}</option>
+                    <option value="{{turma.id}}">{{turma.nome}} - {{turma.descricao}}</option>
                     {% endfor %}
                 </select>
             </div>

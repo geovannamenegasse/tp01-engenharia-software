@@ -74,7 +74,7 @@ def cadastrar_prova():
         flash("Prova cadastrada com sucesso")
         return redirect(url_for('prova.listar_provas'))    
 
-    turmas = Turma.query.all()
+    turmas = Turma.query.filter(Turma.id_professor == current_user.id)
     return render_template("cadastrar_prova.html", turmas = turmas)
 
 @prova.route("/ver_prova_correta/<_id>", methods=["GET","POST"])
@@ -112,8 +112,7 @@ def responder_prova(_id):
     prova = Prova.query.get_or_404(_id)      
 
     if AlunoProva.query.filter(AlunoProva.prova_id == _id, AlunoProva.aluno_id == current_user.id).first():
-        flash("Você já respondeu essa prova!")
-        return redirect(url_for('prova.prova_respondida', _id = _id)) 
+        return redirect(url_for('prova.ver_correcao', id_prova = _id)) 
 
     if request.method == 'POST':
         nota = 0        

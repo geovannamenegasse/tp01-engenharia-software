@@ -82,6 +82,6 @@ def cadastrar_usuario():
         else:
             return redirect(url_for('usuario.cadastrar_usuario'))
 
-        return redirect(url_for('usuario.index'))
+        return redirect(url_for('usuario.login'))
 
     return render_template('cadastrar_usuario.html', form=form)

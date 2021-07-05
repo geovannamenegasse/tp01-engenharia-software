@@ -30,7 +30,8 @@ def ver_aluno(_id):
     turmas = (Aluno.query.join(AlunoTurma, Aluno.id == AlunoTurma.aluno_id)
                               .join(Turma, AlunoTurma.turma_id == Turma.id)
                               .add_columns((Turma.id).label("turma_id"),
-                                           (Turma.descricao).label("descricao"))
+                                           (Turma.descricao).label("descricao"),
+                                           (Turma.nome).label("turma_nome"))
                               .filter(Aluno.id == _id)).all()
 
     return render_template("ver_aluno.html", aluno = aluno, provas = provas, turmas = turmas)

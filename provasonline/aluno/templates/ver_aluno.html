@@ -14,9 +14,13 @@
         </div>
         <div class="card-body">
             {% for turma in turmas %}
-            <a href="{{url_for('turma.ver_turma', _id = turma.turma_id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
+            {% if current_user.urole == 'professor' %}
+            <a href="{{url_for('turma.ver_turma', id = turma.turma_id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
+            {% else %}
+            <a type="button" class="btn btn-light col-md-12 mb-2" role="button">
+            {% endif %}
                 <div class="d-flex justify-content-start">
-                    {{ turma.descricao }} 
+                    {{ turma.turma_nome }} - {{ turma.descricao }} 
                 </div>
             </a>
             {% endfor %}
@@ -29,7 +33,7 @@
         </div>
         <div class="card-body">
             {% for prova in provas %}
-            <a href="{{url_for('prova.prova_respondida', _id = prova.prova_id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
+            <a href="{{url_for('prova.ver_correcao', id_prova = prova.prova_id)}}" type="button" class="btn btn-light col-md-12 mb-2" role="button">
                 <div class="d-flex justify-content-between">
                     <div>{{ prova.descricao }}</div>
                     <div>Nota: {{ prova.nota }}&nbsp;</div>

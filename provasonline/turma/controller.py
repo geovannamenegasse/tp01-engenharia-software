@@ -22,6 +22,8 @@ def editar_turma():
         descricao = request.form['descricao']
         db.session.query(Turma).filter(Turma.id == id_turma).update({Turma.nome: nome, Turma.descricao : descricao})
         db.session.commit()
+        flash("Turma alterada com sucesso")
+        return redirect(url_for('turma.listar_turmas'))
     return render_template("editar_turma.html", turma=turmas)
 
 @turma.route("/adicionar_professor", methods=["GET","POST"])
@@ -63,7 +65,7 @@ def cadastrar_turma():
         # descricao = request.form['prova']
         nome = request.form['nome']
         descricao = request.form['descricao']
-        turma     = Turma(descricao, nome)
+        turma     = Turma(descricao, nome, current_user.id)
         db.session.add(turma)
         db.session.commit()
         flash("Turma cadastrada com sucesso")
@@ -86,5 +88,5 @@ def adicionar_alunos():
             db.session.add(alunoturma)
             db.session.commit()
         id = id_turma
-        return redirect(url_for('turma.adicionar_alunos', id=id))
+        return redirect(url_for('turma.ver_turma', id=id))
     return render_template("adicionar_alunos.html", id = id, alunos = alunos)
