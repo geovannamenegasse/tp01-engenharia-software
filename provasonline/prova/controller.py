@@ -91,16 +91,24 @@ def listar_provas():
     if current_user.urole == 'aluno':
         provas = (AlunoTurma.query.join(Turma, Turma.id == AlunoTurma.turma_id)
                                 .join(Prova, Prova.turma == Turma.id)
+                                .outerjoin(AlunoProva, Prova.id == AlunoProva.prova_id)
                                 .add_columns((Prova.id).label("prova_id"),
                                             (Prova.descricao).label("descricao"),
-                                            (Prova.data).label("data"))
+                                            (Prova.data).label("data"),
+                                            (Prova.valor).label("valor"),
+                                            (AlunoProva.nota).label("nota"),
+                                            (Turma.nome).label("turma"),
+                                            (Turma.descricao).label("turma_descricao"))
                                 .filter(AlunoTurma.aluno_id == current_user.id)).all() 
     else:
         provas = (Professor.query.join(Turma, Turma.id_professor == Professor.id)
                                 .join(Prova, Prova.turma == Turma.id)
                                 .add_columns((Prova.id).label("prova_id"),
                                             (Prova.descricao).label("descricao"),
-                                            (Prova.data).label("data"))
+                                            (Prova.data).label("data"),
+                                            (Prova.valor).label("valor"),
+                                            (Turma.nome).label("turma"),
+                                            (Turma.descricao).label("turma_descricao"))
                                 .filter(Professor.id == current_user.id)).all() 
 
     
@@ -109,7 +117,8 @@ def listar_provas():
 @prova.route("/responder_prova/<_id>", methods=["GET","POST"])
 @login_required(role=[usuario_urole_roles['ALUNO']])
 def responder_prova(_id):
-    prova = Prova.query.get_or_404(_id)      
+    prova = Prova.query.get_or_404(_id)  
+    turma = Turma.query.get_or_404(prova.turma)    
 
     if AlunoProva.query.filter(AlunoProva.prova_id == _id, AlunoProva.aluno_id == current_user.id).first():
         return redirect(url_for('prova.ver_correcao', id_prova = _id)) 
@@ -137,9 +146,7 @@ def responder_prova(_id):
         flash("Prova respondida com sucesso!")
         return redirect(url_for('prova.prova_respondida', _id = _id))  
 
-    return render_template("responder_prova.html", prova = prova)
-
-
+    return render_template("responder_prova.html", prova = prova, turma = turma)
 
 @prova.route("/prova_respondida/<_id>", methods=["GET","POST"])
 @login_required()
@@ -153,9 +160,10 @@ def prova_respondida(_id):
 @login_required(role=[usuario_urole_roles['ALUNO']])
 def ver_correcao(id_prova):
     prova = Prova.query.get_or_404(id_prova)
+    turma = Turma.query.get_or_404(prova.turma) 
     respostas = Resposta.query.filter(Resposta.prova == id_prova, Resposta.aluno == current_user.id).all()
     nota = 0
     for resposta in respostas:
         if resposta.acertou:
             nota = nota + resposta.pergunta_obj.valor
-    return render_template("ver_correcao.html", prova = prova, respostas = respostas, nota = nota)
+    return render_template("ver_correcao.html", prova = prova, respostas = respostas, nota = nota, turma = turma)
