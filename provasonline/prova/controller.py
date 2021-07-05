@@ -157,7 +157,7 @@ def prova_respondida(_id):
     return render_template("prova_respondida.html", prova = prova, respostas = respostas)
 
 @prova.route("/ver_correcao/<id_prova>", methods=["GET","POST"])
-@login_required(role=[usuario_urole_roles['ALUNO']])
+@login_required()
 def ver_correcao(id_prova):
     prova = Prova.query.get_or_404(id_prova)
     turma = Turma.query.get_or_404(prova.turma) 

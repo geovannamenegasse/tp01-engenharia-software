@@ -7,7 +7,7 @@
 <div class="col-sm-12 p-2">
     <div class="container">
         <div class="title">
-            <h3>Turma: {{t.nome}}</h3>
+            <h3>{{t.nome}}</h3><br>
         </div>
         <div class="body">
             <div class="card">
@@ -36,8 +36,8 @@
                 </div>
                 <div class="card-body">
                     <a href="{{url_for('turma.editar_turma', id = t.id)}}"><button type="submit" class="btn btn-primary">Editar Turma</button></a>
-                    <a href="{{url_for('turma.adicionar_alunos', id = t.id)}}"><button type="submit" class="btn btn-primary">Adicionar / Remover Alunos</button></a>
-                    <a href="{{url_for('turma.adicionar_professor', id = t.id)}}"><button type="submit" class="btn btn-primary">Adicionar / Remover Professor</button></a>
+                    <a href="{{url_for('turma.adicionar_alunos', id = t.id)}}"><button type="submit" class="btn btn-primary">Gerenciar Alunos</button></a>
+                    <a href="{{url_for('turma.adicionar_professor', id = t.id)}}"><button type="submit" class="btn btn-primary">Gerenciar Professores</button></a>
                 </div>
             </div>
         </div>
