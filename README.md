@@ -34,6 +34,10 @@ Sistema para aplicação de provas online e gerenciamento de turmas e notas
 7. Como professor quero visualizar as turmas e as notas dos alunos
 8. Como professor quero editar e excluir provas que criei anteriormente
 9. Como professor quero editar e excluir turmas
+11. Como professor quero cadastrar disciplinas 
+12. Como professor quero dividir as turmas em suas respectivas disciplinas
+13. Como aluno quero ver um relatório com todas as minhas atividades e notas
+14. Como professor quero ver um relatório com as atividades e notas de cada aluno
 
 ## Backlog da Sprint
 1. Como usuário quero me cadastrar no sistema
