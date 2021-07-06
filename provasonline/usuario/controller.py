@@ -48,7 +48,7 @@ def login():
             if autenticated_usuario:
                 usuario.authenticated = True
                 login_user(usuario, remember=True)
-                flash("Usuario logado.")
+                # flash("Usuario logado.")
                 return redirect(url_for('usuario.index'))
             else:
                 flash("Senha incorreta.")

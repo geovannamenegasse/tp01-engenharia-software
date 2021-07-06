@@ -5,6 +5,7 @@ from flask import Blueprint
 from flask import render_template, redirect, url_for, flash, request
 from provasonline.turma.models.Turma import Turma , AlunoTurma
 from provasonline.aluno.models.Aluno import Aluno
+from provasonline.prova.models.Prova import Prova
 from provasonline.usuario.models.Usuario import Usuario
 from provasonline.constants import usuario_urole_roles
 import json
@@ -55,7 +56,8 @@ def ver_turma():
     id_turma = request.args.get('id')
     professores = db.session.query(Usuario, Turma).outerjoin(Turma, (Usuario.id == Turma.id_professor) & (Turma.id == id_turma)).filter(Turma.id_professor == Usuario.id).all()
     turmas = Turma.query.filter(Turma.id == id_turma).all()
-    return render_template("ver_turma.html", turmas=turmas, professores=professores)
+    provas = Prova.query.filter(Prova.turma == id_turma)
+    return render_template("ver_turma.html", turmas=turmas, professores=professores, provas = provas)
 
 @turma.route("/cadastrar_turma", methods=["GET", "POST"])
 @login_required(role=[usuario_urole_roles['PROFESSOR']])
