@@ -21,9 +21,6 @@ Sistema para aplicação de provas online e gerenciamento de turmas e notas
 * Leandro Diniz Silva (Full-Stack)  
 * Matheus Alexandre Irias de Oliveira (Full-Stack)
 
-## Diagrama de Arquitetura  
-
-
 ## Backlog do Produto
 1. Como usuário quero me cadastrar no sistema
 2. Como usuário quero logar no sistema
@@ -74,7 +71,7 @@ Sistema para aplicação de provas online e gerenciamento de turmas e notas
 | Visualizar turmas e seus participantes (front)   |Leandro Diniz     |     7      |   Concluído  |
 | Visualizar turmas e seus participantes  (back)   |Leandro Diniz     |     7      |   Concluído  |
 
-## Fluxo de Execução
+## Diagrama do Fluxo de Execução
 
 ![image](https://user-images.githubusercontent.com/49459169/124690384-798fa700-deb0-11eb-99cd-7b28219eab65.png)
 
