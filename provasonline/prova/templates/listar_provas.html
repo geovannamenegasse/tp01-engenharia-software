@@ -31,7 +31,7 @@
         {% endif %}
     {% endif %}        
         <div class="d-flex justify-content-between">            
-            <div style="font-size: smaller;">{{ prova.turma }} - {{prova.turma_descricao}}</div><div>{{ prova.data }}</div>
+            <div style="font-size: smaller;">{{ prova.turma }} - {{prova.turma_descricao}}</div><div>{{ prova.data.strftime("%d/%m/%Y") }}</div>
         </div>
     </a>
     {% endfor %}
