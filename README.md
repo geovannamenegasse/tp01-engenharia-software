@@ -73,3 +73,8 @@ Sistema para aplicação de provas online e gerenciamento de turmas e notas
 | Visualizar a prova corrigida            (back)   |Matheus Irias     |     6      |   Concluído  |
 | Visualizar turmas e seus participantes (front)   |Leandro Diniz     |     7      |   Concluído  |
 | Visualizar turmas e seus participantes  (back)   |Leandro Diniz     |     7      |   Concluído  |
+
+## Fluxo de Execução
+
+![image](https://user-images.githubusercontent.com/49459169/124690384-798fa700-deb0-11eb-99cd-7b28219eab65.png)
+
